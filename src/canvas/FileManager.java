@@ -3,7 +3,12 @@ package canvas;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This class associate the text files with the program
+ * @autor Marlon-A. Anacona - O. 2023777 <marlon.anacona@correounivalle.edu.co>
+ * @autor Luis-F. Belalcazar - A. 2028783 <luis.felipe.belalcazar@correounivalle.edu.co>
+ *  @Version v.1.0.0 date 18/02/22
+ */
 public class FileManager {
     private FileReader fileReader;
     private BufferedReader input;
@@ -24,8 +29,9 @@ public class FileManager {
     private String PATCH_Word= "src/canvas/txt/word.txt";
 
 
-
-
+    /**
+     * this method create a list with the text files
+     */
     public FileManager() {
         try {
             listaPalabras = new ArrayList<String>();
@@ -48,10 +54,11 @@ public class FileManager {
         }
 
     }
-    public void limpiar(){
-        lista.clear();
 
-    }
+    /**
+     * this method return a list with the words the text files
+     * @return
+     */
     public ArrayList<String>lecturaFile() {
         ArrayList <String>frases=new ArrayList<>();
 
@@ -78,6 +85,10 @@ public class FileManager {
         return frases;
     }
 
+    /**
+     * this method return a list with the Usuarios the text files
+     * @return
+     */
     public ArrayList<String>lecturaUsuario() {
         ArrayList <String>Nombres=new ArrayList<>();
 
@@ -103,7 +114,11 @@ public class FileManager {
         return Nombres;
     }
 
-
+    /**
+     * this method  search or register the entered user
+     * @param linea the username
+     * @throws IOException
+     */
     public void escribirUsuario(String linea) throws IOException {
         ArrayList<String> nombreUsuario= new ArrayList<String>();
         nombreUsuario=lecturaUsuario();
@@ -120,8 +135,7 @@ public class FileManager {
             }
 
         }
-        System.out.println(usuarioBuscado);
-        System.out.println(linea);
+
         if(usuarioBuscado.equals(linea)){
 
         }else{
@@ -162,6 +176,12 @@ public class FileManager {
         return posicion;
     }
 
+
+    /**
+     * this method search the level of user
+     * @param nombreUsuarioRecibido
+     * @return
+     */
     public int buscarNivelUsuario(String nombreUsuarioRecibido){
 
         ArrayList<String> nombrseUsuarios= new ArrayList<String>();
@@ -182,6 +202,11 @@ public class FileManager {
 
     }
 
+
+    /**
+     * This method raise user level
+     * @throws IOException
+     */
     public void subirNivel() throws IOException {
 
         if(nivel==10){

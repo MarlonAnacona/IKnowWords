@@ -3,7 +3,12 @@ package canvas;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
+/**
+ * This class create, compare and clear the list of words
+ * @autor Marlon-A. Anacona - O. 2023777 <marlon.anacona@correounivalle.edu.co>
+ * @autor Luis-F. Belalcazar - A. 2028783 <luis.felipe.belalcazar@correounivalle.edu.co>
+ *  @Version v.1.0.0 date 13/01/22
+ */
 public class Diccionario {
 
     private ArrayList<String> diccionario= new ArrayList<String>();
@@ -14,11 +19,18 @@ public class Diccionario {
     private String pal;
     String pal3;
 
+    /**
+     * create a list with a username the usuarios . txt
+     */
     public Diccionario(){
         FileManager fileManager= new FileManager();
         diccionario=fileManager.lecturaFile();
     }
 
+    /**
+     * this method create a list the words on the panel
+     * @return pal
+     */
     public String getFrase(){
         Random aleatorio= new Random();
 
@@ -31,6 +43,11 @@ public class Diccionario {
         return pal;
 
     }
+
+    /**
+     * this method displays the word
+     * @return
+     */
     public String getFrasenuevas(){
         Random aleatorio= new Random();
 
@@ -43,6 +60,10 @@ public class Diccionario {
 
         return palabrasHanSalido;
     }
+
+    /**
+     * this method adds new words from those that have already come out
+     */
     public void agregarPalabras(){
         Random aleatorioPalabra=new Random();
 
@@ -66,7 +87,11 @@ public class Diccionario {
         System.out.println(palabrastotalesNivel);
     }
 
-
+    /**
+     * This method returns the words that have come out and the deception to show them on the screen
+     * @param i
+     * @return pal
+     */
     public String getfraseMostrar(int i){
 
         Random aleatorio= new Random();
@@ -82,7 +107,9 @@ public class Diccionario {
 
     }
 
-
+    /**
+     * clear all arraylist
+     */
     public void limpiar(){
         palabrasHanSalido.clear();
         palabrasCalificar2.clear();

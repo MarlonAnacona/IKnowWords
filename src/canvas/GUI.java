@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- * This class is used for ...
- * @autor Paola-J Rodriguez-C paola.rodriguez@correounivalle.edu.co
- * @version v.1.0.0 date:21/11/2021
- */
+ * Esta clase contiene la clase main y la interface grafica de usuario.
+ * @Autores  Marlon-A. Anacona - O. 2023777 <marlon.anacona@correounivalle.edu.co>
+ *           Luis F Belalcazar A. 2028783 <luis.felipe.belalcazar@correounivalle.edu.co>
+ * @version 1.0.0 date 18/02/2022
+ * */
 public class GUI extends JFrame {
 
     private Header header,header2;
@@ -21,6 +22,10 @@ public class GUI extends JFrame {
     private Escucha escucha;
     private int palabrasaMandar;
     private Canvas canvas;
+    private String MENSAJE_INICIO = "El juego trata de probar tu memoria\n" +
+            "Se te presentaran 10 palabras las cuales tendrás 5 segundos en pantalla, luego desaparece y aparece la siguiente, debes memorizar las  palabras que mas puedas. Despues de esto\n" +" se te presentara un listado con el doble de palabras que se mostraron y por cada palabra debes indicar \n" +
+            "si la palabras estaba o no contenida en el listado a memorizar y tendras 7 segundos\n" +
+            "para responder, en caso de no hacerlo se tomara como un error";
     private Timer timer, iniciar,selecionarConteo,iniciar2;
     public static String nombreUsario;
     public static int nivel;
@@ -41,35 +46,31 @@ public class GUI extends JFrame {
         setNombreUsuario(usuariorr);
         initGUI();
 
-
         //Default JFrame configuration
         this.setTitle("I Know That Word");
         this.setSize(500,400);
-
         this.setResizable(true);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
 
     }
-    private String setNombreUsuario(){
 
-        return nombreUsario;
-    }
+
     /**
      * This method is used to set up the default JComponent Configuration,
      * create Listener and control Objects used for the GUI class
      */
     private void initGUI() throws IOException {
 
-
+        //Initializing the classes
         fileManager =new FileManager();
         niveles=new ModelWord();
         setNombreUsuario(nombreUsario);
-        //  fileManager.subirNivel();
         fileManager.escribirUsuario(nombreUsario);
         nivel=fileManager.buscarNivelUsuario(nombreUsario);
         niveles.setNivelActual(nivel);
-
+        //Set up JFrame Container's Layout
+        //Create Listener Object and Control Object
         header= new Header("¿ Que tan buena es tu memoria ?",Color.black);
         this.add(header,BorderLayout.NORTH);
 
@@ -78,66 +79,71 @@ public class GUI extends JFrame {
         header2.setVisible(false);
 
 
-
-        //Set up JFrame Container's Layout
-        //Create Listener Object and Control Object
         escucha = new Escucha();
         fileManager = new FileManager();
         palabra= new Diccionario();
         //Set up JComponents
 
-
         palabras = new JPanel();
-
         canvas = new Canvas();
-
         canvas.setFocusable(true);
         add(canvas,BorderLayout.CENTER);
-
         botones=new JPanel();
         botones.setBackground(Color.BLUE);
         jugar=new JButton("JUGAR");
         si=new JButton("Si");
         no=new JButton("No");
+        salir=new JButton("SALIR");
         ayuda=new JButton("AYUDA");
-
         botones.add(si);
+        botones.add(salir);
         botones.add(jugar);
         botones.add(ayuda);
         botones.add(no);
-
         this.si.setVisible(false);
         this.no.setVisible(false);
         this.add(botones, BorderLayout.SOUTH);
-
+        jugar.setEnabled(true);
+        salir.addActionListener(escucha);
+        ayuda.addActionListener(escucha);
         jugar.addActionListener(escucha);
         si.addActionListener(escucha);
         no.addActionListener(escucha);
-        //initTimer.setVisible(false);
+
+        //create variable the type Timer
 
         iniciar = new Timer(1000,escucha);
         iniciar2 = new Timer(999,escucha);
         timer = new Timer(5000,escucha);
         selecionarConteo=new Timer(7000,escucha);
-        //timer.start();
-
-
 
     }
 
 
+    /**
+     * This method save the username
+     * @return Username
+     */
 
     private String setNombreUsuario(String nombreUsario1){
         nombreUsario=nombreUsario1;
         return  nombreUsario;
     }
+
+    /**
+     * This method return the username
+     * @return Username
+     */
     public static String getNombreUsario(){
         return nombreUsario;
     }
+
     /**
      * Main process of the Java program
      * @param args Object used in order to send input data from command line when
      *             the program is execute by console.
+     *             Enter the username
+     *
      */
     public static void main(String[] args){
         EventQueue.invokeLater(() -> {
@@ -154,7 +160,9 @@ public class GUI extends JFrame {
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
     private class Escucha implements ActionListener {
-
+        /*
+            instructs the buttons and game time to carry out the program
+             */
         private Random random;
         private int counter,counter2;
         public Escucha(){
@@ -167,10 +175,18 @@ public class GUI extends JFrame {
 
 
         @Override
+
         public void actionPerformed(ActionEvent e) {
-
-            // areaTexto.setText(palabra.getFrase());
-
+        //If to press the button "Salir", exit program
+            if(e.getSource()==salir){
+                JOptionPane.showMessageDialog(null,"Usuiario: "+nombreUsario +"\n Nivel Conseguido: "+nivel);
+                System.exit(0);
+            }
+         //If to press the button "ayuda", You can read the instruccions of the game
+            if(e.getSource()==ayuda){
+                JOptionPane.showMessageDialog(null,MENSAJE_INICIO);
+            }
+            //If to press the button "jugar", start game with a counting up to 5 seconds
             if(e.getSource()==jugar){
 
                 iniciar.start();
@@ -179,11 +195,12 @@ public class GUI extends JFrame {
                 //header.setVisible(false);
                ModelWord.setPalabrasPorNivel();
                 header.setText("Recuerda las SIguientes " +ModelWord.palabrasPorNivel/2 + " Palabras");
-
+                jugar.setEnabled(false);
                 timer.start();
 
 
             }else {
+                //Decide if the word came out or not in the round of words
                 if(e.getSource()==si){
                     ModelWord.setUsuarioCorreto(true);
 
@@ -191,7 +208,7 @@ public class GUI extends JFrame {
                     System.out.println(ModelWord.getAciertos());
                     si.setEnabled(false);
                     no.setEnabled(false);
-                    //timer.restart();
+
 
 
                 }else {
@@ -201,12 +218,12 @@ public class GUI extends JFrame {
                     System.out.println(ModelWord.getAciertos());
                         si.setEnabled(false);
                         no.setEnabled(false);
-                    //timer.restart();
+
 
                 }
                 }
             }
-
+//Start generating the words depending on the level the user is at
 
             if(e.getSource()==iniciar){
                 counter2++;
@@ -390,6 +407,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -457,6 +476,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -525,6 +546,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -593,6 +616,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -659,6 +684,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -726,6 +753,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -793,6 +822,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -861,6 +892,8 @@ public class GUI extends JFrame {
 
                         }else{
                             timer.stop();
+                            JOptionPane.showMessageDialog(null,"AHORA VAMOS A COMPROBAR LAS PALABRAS");
+                            selecionarConteo.start();
                             si.setVisible(true);
                             no.setVisible(true);
                             jugar.setVisible(false);
@@ -885,7 +918,6 @@ public class GUI extends JFrame {
                             if ( ModelWord.getAciertos()>=100)
                             {
                                 ModelWord.verificarPasoNivel(ModelWord.getAciertos());
-
                                 JOptionPane.showMessageDialog(null,"Has terminado con exito el nivel");
                                 selecionarConteo.stop();
                                 counter3=0;

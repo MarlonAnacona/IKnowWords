@@ -4,32 +4,43 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This class create, compare and clear the list of words
+ * @autor Marlon-A. Anacona - O. 2023777 <marlon.anacona@correounivalle.edu.co>
+ * @autor Luis-F. Belalcazar - A. 2028783 <luis.felipe.belalcazar@correounivalle.edu.co>
+ *  @Version v.1.0.0 date 13/01/22
+ */
 public class ModelWord {
     private static int aciertos;
     private  static int nivelActual;
     public static int palabrasPorNivel;
-
-
-
-
     private static ArrayList<String> palabrasQueHanSalido = new ArrayList<>() ;
     ArrayList<String> palabras= new ArrayList<>() ;
-
     private static  ArrayList<String> palabrasCalificar2= new ArrayList<>() ;
 
-
+    /**
+     *This method adds the words that are displayed in the panel.
+     * @param palabrarecibida the list of words that are displayed in the panel.
+     */
     public void setPalabrasEnNivel(String palabrarecibida){
 
         palabrasQueHanSalido.add(palabrarecibida);
-        System.out.println(palabrasQueHanSalido);
+
     }
 
-
+    /**
+     * this method set level of user
+     * @param nivel level of user
+     * @return nivel level of user
+     */
     public int setNivelActual(int nivel){
         nivelActual=nivel;;
         return nivelActual;
     }
 
+    /**
+     * This method set number of words for level
+     */
     public static void setPalabrasPorNivel(){
         switch (nivelActual){
             case 1: palabrasPorNivel=20;
@@ -56,6 +67,12 @@ public class ModelWord {
 
     }
 
+    /**
+     * evaluate the successes to pass the level
+     * @param aciertos
+     * @return
+     * @throws IOException
+     */
     public static boolean verificarPasoNivel(int aciertos) throws IOException {
         FileManager nivel=new FileManager();
         boolean pasoNivel= false;
@@ -105,13 +122,19 @@ public class ModelWord {
         return pasoNivel;
     }
 
-
+    /**
+     * clear arraylist
+     */
     public static void limpiar(){
         palabrasQueHanSalido.clear();
     }
 
 
-
+    /**
+     * This method evaluates if the word is correct or not
+     * @param palabraEscrita words on the panel
+     * @return
+     */
     public static boolean comparar(String palabraEscrita) {
 
         boolean esCorrecta= false;
@@ -124,6 +147,10 @@ public class ModelWord {
             return esCorrecta;
     }
 
+    /**
+     * This method evaluates if the word is correct or not
+     * @param respuestaUsuario
+     */
     public static void setUsuarioCorreto(boolean respuestaUsuario){
 
         boolean respuestaCorrecta= comparar(Canvas.palabraQueSalio);
@@ -134,6 +161,11 @@ public class ModelWord {
             JOptionPane.showMessageDialog(null,"Respuesta erronea");
         }
     }
+
+    /**
+     * This method get succesess the player
+     * @return
+     */
     public static int getAciertos(){
         return aciertos;
     }
